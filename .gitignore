@@ -1,0 +1,3 @@
+AWS/.terraform
+AWS/terraform.tfstate
+AWS/terraform.tfstate.backup

@@ -1,6 +1,6 @@
 # Create a new load balancer
-resource "aws_elb" "bar" {
-  name               = "foobar-terraform-elb"
+resource "aws_elb" "tf_lb" {
+  name               = "terraform-web-elb"
   availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
   security_groups = ["${aws_security_group.allow_web.id}"]
 
