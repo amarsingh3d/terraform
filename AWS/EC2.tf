@@ -1,3 +1,4 @@
+# Define your AWS access
 provider "aws" {
  
   region   = "us-east-1"
@@ -7,21 +8,21 @@ provider "aws" {
 }
 # Create AWS EC2 Instance
  
-resource "aws_instance" "Ubuntu18" {
+resource "aws_instance" "webserver1" {
  
   ami = "ami-07ebfd5b3428b6f4d"
   instance_type = "t2.micro"
   key_name = "EKS_MGT"
   security_groups = ["${aws_security_group.allow_ssh.name}"]
   tags = {
-    Name = "terraform-server"
+    Name = "TF-WebServer1"
   }
      
 }
 
 resource "aws_security_group" "allow_ssh" {
-  name  = "tf_SG"
-  description = "tf sg"
+  name  = "webserver-sg"
+  description = "Web Servers SG"
 
   ingress {
       from_port = 22 # By default Linux SSH listen on TCP port 22
@@ -78,7 +79,7 @@ resource "aws_elb" "bar" {
     interval            = 30
   }
 
-  instances                   = ["${aws_instance.Ubuntu18.id}"]
+  instances                   = ["${aws_instance.webserver1.id}"]
   cross_zone_load_balancing   = true
   idle_timeout                = 400
   connection_draining         = true
@@ -90,7 +91,7 @@ resource "aws_elb" "bar" {
 }
 
 resource "aws_security_group" "allow_web" {
-  name  = "lb_SG"
+  name  = "elb_SG"
   description = "lbtf sg"
 
   ingress {

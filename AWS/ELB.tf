@@ -21,7 +21,7 @@ resource "aws_elb" "bar" {
     interval            = 30
   }
 
-  instances                   = ["${aws_instance.Ubuntu18.id}"]
+  instances                   = ["${aws_instance.webserver1.id}"]
   cross_zone_load_balancing   = true
   idle_timeout                = 400
   connection_draining         = true
@@ -33,8 +33,8 @@ resource "aws_elb" "bar" {
 }
 
 resource "aws_security_group" "allow_web" {
-  name  = "lb_SG"
-  description = "lbtf sg"
+  name  = "elb_SG"
+  description = "Web Servers LB"
 
   ingress {
       from_port = 80 # Allow Web Server access world wide 
