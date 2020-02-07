@@ -1,6 +1,6 @@
 # Create a new load balancer
-resource "aws_elb" "tf_lb" {
-  name               = "terraform-web-elb"
+resource "aws_elb" "LB" {
+  name               = "${var.lb_name["lb1"]}"
   availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
   security_groups = ["${aws_security_group.allow_web.id}"]
 
@@ -21,7 +21,7 @@ resource "aws_elb" "tf_lb" {
     interval            = 30
   }
 
-  instances                   = ["${aws_instance.webserver1.id}"]
+  instances                   = ["${aws_instance.webec2.id}"]
   cross_zone_load_balancing   = true
   idle_timeout                = 400
   connection_draining         = true
@@ -33,15 +33,14 @@ resource "aws_elb" "tf_lb" {
 }
 
 resource "aws_security_group" "allow_web" {
-  name  = "elb_SG"
+  name  = "${var.sg[1]}"
   description = "Web Servers LB"
 
   ingress {
       from_port = 80 # Allow Web Server access world wide 
       to_port = 80
       protocol = "tcp"
-
-      cidr_blocks = ["76.74.201.36/32"]
+      cidr_blocks = [lookup(var.cidrblock, "vpn", "office")]
   }
   egress {
     from_port       = 0
