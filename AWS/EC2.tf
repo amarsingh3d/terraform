@@ -35,7 +35,7 @@ resource "aws_security_group" "allow_ssh" {
       from_port = 22 # By default Linux SSH listen on TCP port 22
       to_port = 22
       protocol = "tcp"
-      cidr_blocks = [lookup(var.cidrblock, "vpn", "ishir")]
+      cidr_blocks = [lookup(var.cidrblock, "vpn")]
       description = "Ciso VPN IP"
   }
   ingress {

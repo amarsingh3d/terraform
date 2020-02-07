@@ -1,4 +1,6 @@
-# Create a new load balancer
+#-----------------------------------------------------------------------------
+# Create load balancer, Add listerns, Add health Check and Add Instance
+#-----------------------------------------------------------------------------
 resource "aws_elb" "LB" {
   name               = "${var.lb_name["lb1"]}"
   availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
@@ -31,6 +33,9 @@ resource "aws_elb" "LB" {
     Name = "terraform-elb"
   }
 }
+#-----------------------------------------------------------------------------
+# Create AWS SG for LB and allow access
+#-----------------------------------------------------------------------------
 
 resource "aws_security_group" "allow_web" {
   name  = "${var.sg[1]}"
@@ -40,7 +45,8 @@ resource "aws_security_group" "allow_web" {
       from_port = 80 # Allow Web Server access world wide 
       to_port = 80
       protocol = "tcp"
-      cidr_blocks = [lookup(var.cidrblock, "vpn", "office")]
+      cidr_blocks = [lookup(var.cidrblock, "vpn")]
+      description = "Corporate VPN"
   }
   egress {
     from_port       = 0
